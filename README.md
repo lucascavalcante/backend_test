@@ -1,67 +1,87 @@
-# Casafy - Backend Test
+# Casafy API
 
-This repository contains Casafy's backend test, which will check candidate's skills regarding backend development.
+Requirements for this project:
+* Docker
+* Docker-compose
 
-## Tecnologies to be used
+_PS: Tested in a Mac environment._
 
-- PHP as programming language (preferably using Laravel as framework)
-- PHPUnit as testing tool
+To run this project, you should clone this repository.
+```bash
+git clone https://github.com/lucascavalcante/backend_test.git
+```
+Into the folder.
+```bash
+cd backend_test
+```
+Change the branch.
+```bash
+git checkout lucas-test
+```
+Build and startup the docker containers.
+```
+docker-compose up -d --build
+```
+After finish docker operations, you should run database operations.
+```
+./db.sh
+```
+_PS: You should give to this file, permission to execution._ (`chmod +x db.sh`)
 
-## What needs to be done
+If everything went well, you can access the URL.
+```
+http://127.0.0.1:8001/api
+```
 
-Considering the following object data structure:
+## Endpoints available
 
 ```
+Users
+
+GET api/users
+POST api/users
+GET api/users/{userId}
+PUT api/users/{userId}
+DELETE api/users/{userId}
+GET api/users/{userId}/properties
+
+Properties
+
+GET api/properties
+POST api/properties
+GET api/properties/{propertyId}
+PUT api/properties/{propertyId}
+DELETE api/properties/{propertyId}
+PATCH api/properties/{propertyId}/purchased/{value}
+```
+
+## Data formats
+
+To add or update an user
+```
 {
-    "id": 1,
-    "address": "Rua Vergueiro, 126",
-    "bedrooms": 3,
-    "bathrooms": 2,
-    "total_area": 125,
-    "purchased": false,
-    "value": 125000.00,
-    "discount": 10
-    "owner_id": 1,
-    "expired": false,
-    "created_at": "2021-02-23 16:02:16",
-    "updated_at": "2021-02-23 16:02:16"
+	"name": "John Doe",
+	"email": "john@doe.com"
 }
 ```
 
-And a simple user data structure:
+To add or update an address
 ```
 {
-    "id": 1,
-    "name": "John",
-    "email": "john@test.com"
-    "created_at": "2021-02-23 15:02:16",
-    "updated_at": "2021-02-23 15:02:16"
+	"address": "123, Main Street",
+	"bedrooms": 3,
+	"bathrooms": 2,
+	"total_area": 322,
+	"value": 100585.00,
+	"discount": 20,
+	"owner_id": 2
 }
 ```
 
-You'll have to create the following endpoints:
+## Tests
 
-- Resource endpoints to Create, Read, Update and Delete users;
-- Resource endpoints to Create, Read, Update and Delete properties;
-- An endpoint to get all the properties associated with an user;
-- An endpoint to change the object purchased property;
-
-## Requisites
-
-Some requisites must be followed:
-
-- Every property must be associated with an user;
-- An user cannot have more than 3 properties with purchased = false;
-- If created_at exceeds 3 months, expired property should be changed to true while getting the object;
-- The value property to be shown in the object get request reponse must always consider the discount (e.g. 112500.00, taking into account the 10% discount shown in the example);
-
-## What we like
-
-- Clean code;
-- Good practices (SOLID, DRY, etc);
-- Unit tests;
-- Type check;
-
-## Bonus
-
-It will be a bonus requisite if you use Docker containers to setup the application.
+To run the tests.
+```
+docker exec -it casafy-app php artisan test
+```
+_PS: After run the tests, the database will be resetted._
